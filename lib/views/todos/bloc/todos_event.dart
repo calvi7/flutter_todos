@@ -19,3 +19,15 @@ class TodoRemoved extends TodosEvent {
 
   const TodoRemoved(this.todo);
 }
+
+class TodoCompleted extends TodosEvent {
+  final Todo todo;
+
+  const TodoCompleted(this.todo);
+}
+
+class TodoUncompleted extends TodosEvent {
+  final Todo todo;
+
+  const TodoUncompleted(this.todo);
+}

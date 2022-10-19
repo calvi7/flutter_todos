@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   http: ^0.13.5
   hydrated_bloc: ^8.1.0
+  intl: ^0.17.0
   mason: ^0.1.0-dev.34
   path_provider: ^2.0.11
 

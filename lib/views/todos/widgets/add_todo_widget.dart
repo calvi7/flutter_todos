@@ -18,7 +18,7 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height * 0.2,
       child: Stack(
         children: [
           Align(
@@ -30,22 +30,10 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
                   top: Radius.circular(10),
                 ),
               ),
-              child: Column(
-                children: [
-                  AddTodoInput(label: "Title", controller: titleController),
-                  AddTodoInput(
-                    label: "Description",
-                    controller: descriptionController,
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _createTodo(
-                      context,
-                      titleController.text,
-                      descriptionController.text,
-                    ),
-                    child: const Text("Create Todo"),
-                  ),
-                ],
+              child: AddTodoInput(
+                label: "Agregar una tarea",
+                controller: titleController,
+                onSend: () => _createTodo(context, titleController.text),
               ),
             ),
           ),
@@ -54,8 +42,8 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
     );
   }
 
-  void _createTodo(BuildContext context, String title, String description) {
-    final isValid = _validateTodo(title, description);
+  void _createTodo(BuildContext context, String title) {
+    final isValid = _validateTodo(title);
 
     if (!isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,13 +62,13 @@ class _AddTodoWidgetState extends State<AddTodoWidget> {
     final Todo todo = Todo(
       title: title,
       completed: false,
-      description: description,
+      created: DateTime.now(),
     );
     context.read<TodosBloc>().add(TodoAdded(todo));
     Navigator.of(context).pop();
   }
 
-  bool _validateTodo(String title, String description) {
+  bool _validateTodo(String title) {
     if (title.isEmpty) {
       return false;
     }

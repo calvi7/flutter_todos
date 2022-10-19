@@ -7,9 +7,9 @@ class TodosInitialView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
+        width: MediaQuery.of(context).size.width * 0.7,
         child: const Text(
-          "It seems there are no Todos loaded. Maybe try adding one?",
+          "Parece que no tenes tareas pendientes.",
           textAlign: TextAlign.center,
         ),
       ),

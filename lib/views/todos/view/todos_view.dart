@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_todos/views/todos/widgets/add_todo_widget.dart';
+import 'package:flutter_todos/views/todos/widgets/fab_builder.dart';
+import 'package:flutter_todos/views/todos/widgets/todos_appbar.dart';
 import 'package:flutter_todos/views/todos/widgets/todos_initial_view.dart';
 import 'package:flutter_todos/views/todos/widgets/todos_loaded_view.dart';
 import 'package:flutter_todos/widgets/loading_widget.dart';
@@ -16,17 +18,25 @@ class TodosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Builder(
-        builder: (context) {
-          return FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () => Scaffold.of(context).showBottomSheet(
-              (context) => const AddTodoWidget(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: const FabBuilder(),
+      body: CustomScrollView(
+        slivers: [
+          const TodosAppbar(),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                _blocBuilder(context),
+              ],
             ),
-          );
-        },
+          ),
+        ],
       ),
-      body: BlocBuilder<TodosBloc, TodosState>(
+    );
+  }
+
+  Widget _blocBuilder(BuildContext context) =>
+      BlocBuilder<TodosBloc, TodosState>(
         builder: (context, state) {
           if (state is TodosLoading) {
             return const LoadingWidget();
@@ -38,7 +48,5 @@ class TodosView extends StatelessWidget {
             return const TodosInitialView();
           }
         },
-      ),
-    );
-  }
+      );
 }

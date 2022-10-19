@@ -13,6 +13,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         super(TodosInitial()) {
     on<TodoAdded>(_addTodo);
     on<TodoRemoved>(_removeTodo);
+    on<TodoCompleted>(_completeTodo);
+    on<TodoUncompleted>(_uncompleteTodo);
   }
 
   final TodoRepository _repository;
@@ -37,6 +39,28 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         emit(TodosLoaded(_repository.todos));
       }
     } catch (e) {
+      emit(TodosError());
+    }
+  }
+
+  void _completeTodo(TodoCompleted event, Emitter<TodosState> emit) {
+    emit(TodosLoading());
+    try {
+      add(TodoRemoved(event.todo));
+      emit(TodosLoaded(_repository.todos));
+    } catch (_) {
+      emit(TodosError());
+    }
+  }
+
+  void _uncompleteTodo(TodoUncompleted event, Emitter<TodosState> emit) {
+    emit(TodosLoading());
+    try {
+      Todo todo = event.todo.copyWith(completed: false);
+      _repository.remove(event.todo);
+      _repository.add(todo);
+      emit(TodosLoaded(_repository.todos));
+    } catch (_) {
       emit(TodosError());
     }
   }
